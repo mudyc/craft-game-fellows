@@ -1,0 +1,24 @@
+
+- language
+   - CRAFT - game fellows
+   - CRAFT - pelihemmot
+   - tää on vaan joku /[lang]/foo ei tästä kannata tehdä vaikeeta.
+   - select ja: en es fi kielet
+   - header..
+   - tehdäänpä niin että kun kieliä on vähän niin kirjoitetaan kaikki sekaisin html:änä ja sitten js:llä näkyviin. simppeli.
+- index page, very simple
+- create button which says you need to login or register first
+   /api/authenticate
+- register (db only) 
+- login / logout
+
+- tutorial
+- fork / haaroita
+- projektin luonti
+- projektinäkymä
+
+- resurssointi
+- kuvaresurssit pankista
+- tilemap
+- ääniresurssit
+- mapeditor

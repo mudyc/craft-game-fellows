@@ -1,0 +1,7 @@
+CRAFT - game fellows
+
+Craft is a place / society / platform / environment for kids to learn some
+programming. It builds with pixijs, fast webgl accelerated rendering library,
+and adds a bunch of features to have smoothly working environment. It builds on
+top of other things too but I have not yet cherry picked those.
+
