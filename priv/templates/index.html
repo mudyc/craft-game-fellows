@@ -2,34 +2,197 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/skeleton.css">
+    <link rel="stylesheet" href="/css/web.css">
   </head>
   <body>
-    <header>
-      <div lang="en">
-        CRAFT - game fellows
-      </div>
-      <div lang="es">
-        CRAFT - compañeros de juego
-      </div>
-      <div lang="fi">
-        CRAFT - pelihemmot
-      </div>
+    <nav class="navbar">
+      <div class="container">
+        <ul class="navbar-list">
+          <li class="navbar-item">
+            <div lang="en">
+              CRAFT - game fellows
+            </div>
+            <div lang="es">
+              CRAFT - compañeros de juego
+            </div>
+            <div lang="fi">
+              CRAFT - pelihemmot
+            </div>
+          </li>
       
-      <div class="logged-out" hidden>
-        <a href="register">Register</a>
-        <a href="register">Login</a>
+          <li class="navbar-item logged-out" hidden>
+            <a class="open-modal" href="register">
+              <span lang="en">Register</span>
+              <span lang="es">Register</span>
+              <span lang="fi">Registeröidy</span>
+            </a>
+          </li>
+          <li class="navbar-item logged-out" hidden>
+            <a class="open-modal" href="login">
+              <span lang="en">Login</span>
+              <span lang="es">Iniciar sesión</span>
+              <span lang="fi">Kirjaudu</span>
+            </a>
+          </li>
+          <li class="navbar-item logged-in" hidden>
+            <span id="username"></span>
+            <a href="/api/logout">
+              <span lang="en">Logout</span>
+              <span lang="es">Cerrar sesión</span>
+              <span lang="fi">Poistu</span>
+            </a>
+          </li>
+          <li class="navbar-item">
+            <select id="lang-selector">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+              <option value="fi">Suomi</option>
+            </select>
+          </li>
+        </ul>
       </div>
-      <div class="logged-in" hidden>
-        <span id="username"></span>
-        <a href="register">Logout</a>
+    </nav>
+    
+    <div class="modal" id="register">
+      <div class="modal-inner">
+        <form method="post" action="/api/register" novalidate>
+          <div class="modal-content">
+            <div class="modal-close-icon">
+              <a href="javascript:void(0)" class="close-modal"><i class="fa fa-times" aria-hidden="true">&times;</i></a>
+            </div>
+            <div class="modal-content-inner">
+              <h4 lang="en">Register new fellow</h4>
+              <h4 lang="es">Register nuevo compañero</h4>
+              <h4 lang="fi">Rekisteröi uusi hemmo</h4>
+
+              <p lang="fi">
+                Tervetuloa yhteisöömme! Voit kehittää ja pelata omia sekä toisten tekemiä
+                pelejä. Rekisteröi tunnuksesi salasanan kanssa, sekä vanhempasi yhteystiedot
+                (email) niin pääset luomaan omia juttujasi. Kaikki on ilmaista.
+              </p>
+              <p lang="en">
+                Welcome new fellow! You can develop and play your own and other works. 
+                Register your username and password. Also insert your parent's email to 
+                continue to be creative. It's all free.
+              </p>
+              <p lang="es">
+                ¡Bienvenido nuevo compañero! Puedas .... You can develop and play your own and other works. 
+                Register your username and password. Also insert your parent's email to 
+                continue to be creative. It's all free.
+              </p>
+              <div>
+                <label lang="fi">Käyttäjänimi</label>
+                <label lang="es">Nombre de usuario</label>
+                <label lang="en">Username</label>
+                <input type="text" name="username">
+                <div hidden id="username_too_short" class="error">
+                  <span lang="fi">Käyttäjätunnus on liian lyhyt</span>
+                  <span lang="en">Username is too short</span>
+                  <span lang="es">¡Nombre es más korta!</span>
+                </div>
+                <div hidden id="username_is_reserved" class="error">
+                  <span lang="fi">Käyttäjätunnus on jo varattu</span>
+                  <span lang="en">Username is already reserved</span>
+                  <span lang="es">¡Usuario ha reservado!</span>
+                </div>
+              </div>
+              <div>
+                <label lang="fi">Salasana</label>
+                <label lang="es">Contraseña</label>
+                <label lang="en">Password</label>
+                <input type="password" name="password">
+                <div hidden id="password_too_short" class="error">
+                  <span lang="fi">Salasana on liian lyhyt</span>
+                  <span lang="en">Password is too short</span>
+                  <span lang="es">¡Contraseña es más korta!</span>
+                </div>
+                
+              </div>
+              <div>
+                <label lang="fi">Ikä</label>
+                <label lang="es">Años</label>
+                <label lang="en">Age</label>
+                <input type="text" name="age">
+              </div>
+              <div>
+                <label lang="fi">Sukupuoli</label>
+                <label lang="es">Sexo</label>
+                <label lang="en">Sex</label>
+                <label>
+                  <input type="radio" name="sex" value="m">
+                  <span lang="fi">poika</span>
+                  <span lang="en">boy</span>
+                  <span lang="es">chico</span>
+                </label>
+                <label>
+                  <input type="radio" name="sex" value="f">
+                  <span lang="fi">tyttö</span>
+                  <span lang="en">girl</span>
+                  <span lang="es">chica</span>
+                </label>
+              </div>
+              <div>
+                <label lang="fi">Vanhemman email</label>
+                <label lang="es">Email de padre</label>
+                <label lang="en">Parent's email</label>
+                <input type="email" name="parent_email">
+                <div hidden id="email_is_not_valid" class="error">
+                  <span lang="fi">Sähköpostiosoite ei ole kelvollinen</span>
+                  <span lang="en">Email is not valid</span>
+                  <span lang="es">¡Email no es válido!</span>
+                </div>
+              </div>
+            </div>
+            <hr class="modal-buttons-seperator">
+            <div class="modal-buttons">
+              <button class="button close-modal">Cancel</button>
+              <button class="button button-primary">Register</button>
+            </div>
+          </div>
+        </form>
       </div>
-      
-      <select id="lang-selector">
-        <option value="es">Español</option>
-        <option value="en">English</option>
-        <option value="fi">Suomi</option>
-      </select>
-    </header>
+    </div>
+    <div class="modal" id="login">
+      <div class="modal-inner">
+        <form method="post" action="/api/login" novalidate>
+          <div class="modal-content">
+            <div class="modal-close-icon">
+              <a href="javascript:void(0)" class="close-modal"><i class="fa fa-times" aria-hidden="true">&times;</i></a>
+            </div>
+            <div class="modal-content-inner">
+              <div>
+                <label lang="fi">Käyttäjänimi</label>
+                <label lang="es">Nombre de usuario</label>
+                <label lang="en">Username</label>
+                <input type="text" name="username">
+              </div>
+              <div>
+                <label lang="fi">Salasana</label>
+                <label lang="es">Contraseña</label>
+                <label lang="en">Password</label>
+                <input type="password" name="password">
+                <div hidden id="password_is_invalid" class="error">
+                  <span lang="fi">Salasana ei täsmää</span>
+                  <span lang="en">Password is invalid</span>
+                  <span lang="es">¡Contraseña no es válido!</span>
+                </div>
+                
+              </div>
+            </div>
+            <hr class="modal-buttons-seperator">
+            <div class="modal-buttons">
+              <button class="button close-modal">Cancel</button>
+              <button class="button button-primary">Login</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    
+    
     
     <script src="/js/web.js"></script>
   </body>

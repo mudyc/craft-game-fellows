@@ -4,13 +4,15 @@
 -export([start/2, stop/1]).
 
 start(_Type, _Args) ->
+    error_logger:logfile({open, <<"logger.log">>}),
+    error_logger:tty(true),
   	Dispatch = cowboy_router:compile([
   		{'_', [
         
         % Authentication service
   			{"/api/is_authenticated", api_auth, []},
-  			{"/api/register",         api_auth, []},
-  			{"/api/login",            api_auth, []},
+  			{"/api/register",         api_auth, {no_auth}},
+  			{"/api/login",            api_auth, {no_auth}},
   			{"/api/logout",           api_auth, []},
 
         % Project creation service
@@ -28,7 +30,8 @@ start(_Type, _Args) ->
 
         % Web content delivery (html body, tutorial conten)
   			{"/",                 index_lang_redirect, []},
-        {"/js/[...]",         cowboy_static, {priv_dir, craft, "js/", [{mimetypes, cow_mimetypes, all}] }},
+        {"/js/[...]",         cowboy_static, {priv_dir, craft, "js/", [{mimetypes, cow_mimetypes, web}] }},
+        {"/css/[...]",        cowboy_static, {priv_dir, craft, "css/", [{mimetypes, cow_mimetypes, web}] }},
   			{"/:lang/",           index_page_handler, []}
   			%{"/:lang/tutorials", index_page_handler, []}
   			%{"/:lang/tutorial/:area", index_page_handler, []}

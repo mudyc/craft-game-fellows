@@ -13,6 +13,20 @@
 - login / logout
 
 - tutorial
+    - move sprite around
+    - logging
+    - rotate
+    - rendering loop
+    - jump around
+    - events and handling
+    - sound
+    - background
+    - error traces
+    - scrolling background
+    - animation tilemap
+    - fonts
+    - highscore list
+    - 
 - fork / haaroita
 - projektin luonti
 - projektinäkymä
