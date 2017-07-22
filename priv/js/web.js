@@ -3,6 +3,7 @@
 (function(){
   
   // utils
+  
   function query(selector) { return document.querySelector(selector); }
   function queryAll(selector) { return document.querySelectorAll(selector); }
   
@@ -56,17 +57,21 @@
     }
     return ser;
   }
+  
+  function each(list, cb) {
+    for (var i=0, len=list.length; i<len; i++) {
+      cb(list[i]);
+    }
+  }
 
   (function(){
 
     // language
 
     var lang = location.pathname.split('/')[1];
-    var lang_tags = queryAll('[lang]:not([lang="'+lang+'"]');
-    var len = lang_tags.length;
-    while (len-- > 0) {
-      lang_tags[len].hidden = true;
-    }
+    each(queryAll('[lang]:not([lang="'+lang+'"]'), function(lang_tag){
+      lang_tag.hidden = true;
+    });
     query('#lang-selector option[value="'+lang+'"]').selected = true;
   })();
 
@@ -95,6 +100,7 @@
       e.preventDefault();
       get('/api/logout', function(){}, function(){});
       document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      location.reload();
     });
   
   })();
@@ -133,6 +139,8 @@
   })();
 
   (function(){
+    
+    // register and login
   
     query('[action="/api/register"]').addEventListener("submit", modal_submit);
     query('[action="/api/login"]').addEventListener("submit", modal_submit);
@@ -164,7 +172,89 @@
       );
     };
   
-  })()
+  })();
   
+  (function(){
+
+    // tutorial examples
+  
+    each(queryAll('.embedded-project'), function(e){
+      var proj = e.dataset.project;
+      
+      // get sources
+      (function(e, proj){
+        get('/project/' + proj + '/sources.json', function(req){
+          var sources = JSON.parse(req.responseText);
+          (function(sources, src){
+            each(sources, function(source){
+                get('/project/' + proj + '/' + source, function(req){
+                  src += '<div class="header">' + source + '</div>';
+                  src += '<div class="source"><pre>' + req.responseText + '</pre></div>';
+              
+                  // get iframe for canvas
+                  e.innerHTML = '<div class="example u-cf"> <iframe src="/project/' + proj + '"></iframe><div class="sources">'+src+'</div></div>';
+                }, function(){});
+            });
+          })(sources, '');
+        }, function(req){});
+      })(e, proj);
+    });
+  })();
+
+  (function(){
+
+    // project html
+
+    if (query('.project .left') != null) {
+      var proj = document.body.dataset.project;
+    
+      function addSourceTab(src) {
+        console.log('add src tab');
+        var tab = document.createElement('div');
+        tab.textContent = src;
+        tab.classList.add('tab');
+        query('.source-tabs').appendChild(tab);
+      }
+      function showActiveSource() {
+        var js = query('.tab.active').textContent;
+        get('/project/' + proj + '/'+js, function(req){
+          var src = document.createElement('textarea');
+          src.textContent = req.responseText;
+          query('.source-file').appendChild(src);
+          resize();
+          CodeMirror.fromTextArea(src);
+        }, function(req){});
+      }
+      function resize() {
+        var w = window,
+            d = document,
+            e = d.documentElement,
+            g = d.getElementsByTagName('body')[0],
+            w = w.innerWidth || e.clientWidth || g.clientWidth,
+            h = w.innerHeight|| e.clientHeight|| g.clientHeight;
+    
+        query('.right').style.height = (h - 50)+'px';
+        query('.source-file').style.height = (h - 50)+'px';
+      }
+
+      get('/project/' + proj + '/sources.json', function(req){
+        each(JSON.parse(req.responseText), function(source){
+          addSourceTab(source);
+        })
+        query('.tab:first-child').classList.add('active');
+        
+        showActiveSource();
+      }, function(){});
+      
+      window.addEventListener('message', function(msg){
+        var line = document.createElement('div');
+        line.textContent = msg.data;
+        query('.console').appendChild(line);
+      })
+      window.addEventListener('resize', function(e){
+        resize();
+      })
+    }
+  })();
   
 })()

@@ -18,9 +18,25 @@
         Tässä opasteessa käydään läpi miten ladataan ruudulle kuva ja kuinka sitä voidaan liikutella.
       </p>
       
+      <p lang="fi"> Aloitetaan alusta ja piirretään ruutuun craftman. Siihen tarvitaan kuva joka pitää ladata.
+      Valitsemme kuvapankista haluamamme kuvan ja nimeämme sen "craftman". Latauksen jälkeen kutsutaan
+      <strong>setup()</strong> fuktiota, johon voit kirjoittaa haluamasi koodin. Craft järjestelmä on luonut
+      sinulle kaksi globaalia muuttujaa: <strong>stage</strong> on PIXI.Container johon voit lisätä
+      visuaalisia elmenttejä ja <strong>renderer</strong> muuttujaa kutsut kun haluat piirtää näytölle. </p>
       
       <div class="embedded-project" data-project="tut/craftman-1"></div>
       
+      <p lang="fi"> Kun haluamme liikuttaa craftman ukkoa, voimme muuttaa <strong>x</strong> tai
+      <strong>y</strong> koordinaattia. Lisäksi meidän pitää pyytää järjestelmältä uutta ruudun piirtoa. Tätä
+      varten teemme <strong>gameLoop</strong> -funktion (suomeksi pelisilmukka), joka mahdollistaa uudet
+      piirrot ja craftmanin siirron. </p>
+
+      <div class="embedded-project" data-project="tut/craftman-2"></div>
+
+      <p lang="fi"> Seuraavaksi voimme pyörittää craftman ukkoa. Laitamme hänet hyppäämään eteenpäin ja
+      tekemään samalla voltin. Teemme tämän muuttamalla <strong>rotation</strong> muuttuja.</p>
+
+      <div class="embedded-project" data-project="tut/craftman-3"></div>
       
     </div>
     
