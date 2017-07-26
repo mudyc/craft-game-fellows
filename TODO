@@ -2,7 +2,12 @@
 TODO
 ====
 
-- git editointi
+- project
+   - git editointi
+   - fork
+   - delete
+   - new
+   - rename
 - kuvapankki
 - tutorial
     - logging
@@ -20,18 +25,19 @@ TODO
     - 
 - fork / haaroita
 - projektin luonti
-- projektinäkymä
 - dns
 - resurssointi
 - kuvaresurssit pankista
 - tilemap
 - ääniresurssit
+- https://pixijs.github.io/pixi-sound/examples/index.html
 - mapeditor
 
 
 DONE
 ====
 
+- projektinäkymä
 - project embedding
 - tutorial
     - move sprite around

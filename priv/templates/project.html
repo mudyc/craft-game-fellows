@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="/img/craftman.png">
     <link rel="stylesheet" href="/css/normalize.css">
     <link rel="stylesheet" href="/css/skeleton.css">
     <link rel="stylesheet" href="/css/codemirror.css">
@@ -10,7 +11,47 @@
   <body class="project" data-project="{{ project }}">
     
     {{ navbar }}
+
     
+      <div class="project-header container">
+        <label>
+          <span lang="fi">Projekti</span>
+          <span lang="en">Project</span>
+          <span lang="es">Proyecto</span>
+        </label>
+        <span>{{ project }}</span>
+        
+        <button id="delete" class="own-project">
+          <span lang="fi">Poista projekti</span>
+          <span lang="en">Delete project</span>
+          <span lang="es">Borrar proyecto</span>
+        </button>
+        |
+        <label>
+          <span lang="fi">Tykkäykset</span>
+          <span lang="en">Likes</span>
+          <span lang="es">Gustos</span>
+        </label>
+        <span class="likes">0</span>
+        <button id="like" class="others-project">
+          <span lang="fi">Tykkään</span>
+          <span lang="en">I like</span>
+          <span lang="es">Me gusta</span>
+        </button>
+        |
+        <label>
+          <span lang="fi">Forkkaukset</span>
+          <span lang="en">Forks</span>
+          <span lang="es">Bifurcaciónes</span>
+        </label>
+        <span class="forks">0</span>
+        <button id="fork" class="others-project">
+          <span lang="fi">Forkkaa tää</span>
+          <span lang="en">Fork it</span>
+          <span lang="es">Bifurcación</span>
+        </button>
+
+      </div>
     
     <div class="left">
       <iframe src="/project/{{ project }}"  ></iframe>

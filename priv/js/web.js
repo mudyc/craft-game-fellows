@@ -3,6 +3,23 @@
 (function(){
   
   // utils
+
+  function debounce(func, wait, immediate) {
+    // https://davidwalsh.name/javascript-debounce-function
+    // This code is licensed with MIT and can be found from underscore
+  	var timeout;
+  	return function() {
+  		var context = this, args = arguments;
+  		var later = function() {
+  			timeout = null;
+  			if (!immediate) func.apply(context, args);
+  		};
+  		var callNow = immediate && !timeout;
+  		clearTimeout(timeout);
+  		timeout = setTimeout(later, wait);
+  		if (callNow) func.apply(context, args);
+  	};
+  };
   
   function query(selector) { return document.querySelector(selector); }
   function queryAll(selector) { return document.querySelectorAll(selector); }
@@ -49,6 +66,9 @@
 
   function serialize(form) {
     var data = new FormData(form);
+    return serialize_formdata(data);
+  }
+  function serialize_formdata(data) {
     var ser = '';
     for (var p of data) {
       if (ser !== '')
@@ -69,6 +89,7 @@
     // language
 
     var lang = location.pathname.split('/')[1];
+    document.body.dataset.lang = lang;
     each(queryAll('[lang]:not([lang="'+lang+'"]'), function(lang_tag){
       lang_tag.hidden = true;
     });
@@ -207,24 +228,55 @@
 
     if (query('.project .left') != null) {
       var proj = document.body.dataset.project;
-    
-      function addSourceTab(src) {
+
+      function add_source_tab(src) {
         console.log('add src tab');
         var tab = document.createElement('div');
         tab.textContent = src;
         tab.classList.add('tab');
         query('.source-tabs').appendChild(tab);
       }
-      function showActiveSource() {
+      function show_active_source() {
         var js = query('.tab.active').textContent;
         get('/project/' + proj + '/'+js, function(req){
           var src = document.createElement('textarea');
           src.textContent = req.responseText;
           query('.source-file').appendChild(src);
           resize();
-          CodeMirror.fromTextArea(src);
+          var cm = CodeMirror.fromTextArea(src, { lineSeparator: "\n" });
+          cm.setOption("lineSeparator", "\n");
+          cm.on('change', source_changed);
         }, function(req){});
       }
+      var source_changed = debounce(function(cm){
+        var js = query('.tab.active').textContent;
+        var orig_src = cm.getValue(), src = orig_src.replace(/\+/g, "%2B");
+        console.log(src.replace(/\n/g, "LF").replace(/\r/g, "CR"), encodeURI(src)); 
+        var fd = new FormData();
+        fd.append('file', js);
+        fd.append('data', encodeURI(src));
+        post('/api/edit/' + proj, serialize_formdata(fd),
+          function(req){
+            try {
+              new Function(orig_src);
+              // if ok, we can reload the iframe..
+
+              console.log("reload iframe");
+              query('iframe').src += '';
+            } catch (e) {
+              console.log("there is some error: "+e);
+            }
+          }, function(req){});
+      }, 1000);
+      
+      query('#fork').addEventListener('click', function(e){
+        post('/api/fork/' + proj, "",
+          function(req){
+              location.href = '/' + document.body.dataset.lang + req.responseText;
+          }, function(req){}
+        );
+      });
+      
       function resize() {
         var w = window,
             d = document,
@@ -239,11 +291,11 @@
 
       get('/project/' + proj + '/sources.json', function(req){
         each(JSON.parse(req.responseText), function(source){
-          addSourceTab(source);
+          add_source_tab(source);
         })
         query('.tab:first-child').classList.add('active');
         
-        showActiveSource();
+        show_active_source();
       }, function(){});
       
       window.addEventListener('message', function(msg){

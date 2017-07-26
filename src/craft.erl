@@ -22,6 +22,8 @@ start(_Type, _Args) ->
         % {"/api/:project/audio/list",   api_assets, {no_auth}},
         % {"/api/:project/audio/bind",   api_assets, []},
         % {"/api/:project/audio/unbind", api_assets, []},
+        {"/api/edit/:user/:project",     api_sources, {edit}},
+        {"/api/fork/:user/:project",           api_sources, {fork}},
         {"/assets/img/[...]", api_assets, {no_auth}},
         
         % Projects

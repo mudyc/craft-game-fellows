@@ -31,6 +31,16 @@ has_session(SessionId) ->
             {true, proplists:get_value("user_id", Combined)}
     end.
 
+has_access(SessionId, User) ->
+    case has_session(SessionId) of
+      {false, _}     -> false;
+      {true, UserId} -> RealUser = get_username(UserId),
+                        if
+                          RealUser =:= User -> true;
+                          true              -> false
+                        end
+    end.
+
 get_username(UserId) ->
     sqlite3:open(users),
     [{columns, Cols}, {rows, Rows}] = sqlite3:read(users, user, {id, UserId}),

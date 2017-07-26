@@ -142,7 +142,12 @@ nav .navbar-item a {
   font-size: 1.5rem;
 }
 
-
+.project-header {
+  padding-top: 3px;
+}
+.project-header label {
+  display: inline-block;
+}
 .project .left, .project .right {
   float: left;
   width: 48%;
