@@ -22,19 +22,15 @@ start(_Type, _Args) ->
         % {"/api/:project/audio/list",   api_assets, {no_auth}},
         % {"/api/:project/audio/bind",   api_assets, []},
         % {"/api/:project/audio/unbind", api_assets, []},
-        {"/api/edit/:user/:project",     api_sources, {edit}},
-        {"/api/fork/:user/:project",           api_sources, {fork}},
         {"/assets/img/[...]", api_assets, {no_auth}},
         
-        % Projects
-        {"/project/:user/:project",         project_handler, []},
-        {"/project/:user/:project/:source", project_handler, []},
-
-        % Project creation service
-        % {"/api/create_proj",    api_proj, []},
-        % {"/api/fork_proj",      api_proj, []},
-        % {"/api/delete_proj",    api_proj, []},
-
+        % Git service
+        {"/api/edit/:user/:project",           api_sources, {edit}},
+        {"/api/fork/:user/:project",           api_sources, {fork}},
+        
+        % Project content
+        {"/project/:user/:project",            project_handler, []},
+        {"/project/:user/:project/:source",    project_handler, []},
         
 
         % Web content delivery (html body, tutorial conten)

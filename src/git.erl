@@ -42,9 +42,9 @@ edit(User, Project, File, Data_) ->
   F = binary_to_list(File),
   TMP = lib:nonl(os:cmd("mktemp")),
   Data = unicode:characters_to_binary(http_uri:decode(binary_to_list(Data_))),
-  io:fwrite("~p", [Data]),
+  %io:fwrite("~p", [Data]),
   file:write_file(TMP, Data), %io_lib:fwrite("~p", [Data])),
-  io:fwrite("file: ~p~n",[TMP]),
+  %io:fwrite("file: ~p~n",[TMP]),
 
   ParentCommit = lib:nonl(os:cmd("git -C " ++ Repo ++ " show-ref -s master")),
   
@@ -71,7 +71,7 @@ edit(User, Project, File, Data_) ->
   % Commit it.
   NewCommit = lib:nonl(os:cmd("git -C " ++ Repo ++ " commit-tree " ++ TreeId ++ " -p " ++ ParentCommit ++ " -m \"Test\"")),
 
-io:fwrite("tmp ~p, blob ~p, tree ~p, new commit ~p, parent ~p~n",[TMP, BlobId, TreeId, NewCommit, ParentCommit]),
+%io:fwrite("tmp ~p, blob ~p, tree ~p, new commit ~p, parent ~p~n",[TMP, BlobId, TreeId, NewCommit, ParentCommit]),
 
   % Update the branch
   os:cmd("git -C " ++ Repo ++ " update-ref refs/heads/master " ++ NewCommit ++ " " ++ ParentCommit).

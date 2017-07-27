@@ -94,6 +94,10 @@
       lang_tag.hidden = true;
     });
     query('#lang-selector option[value="'+lang+'"]').selected = true;
+    query('#lang-selector').addEventListener('change', function(e){
+      console.log(query('#lang-selector option:checked'));
+      location.href = location.href.replace('/'+lang+'/', '/' + query('#lang-selector option:checked').value + '/');
+    });
   })();
 
   (function(){
@@ -213,7 +217,7 @@
                   src += '<div class="source"><pre>' + req.responseText + '</pre></div>';
               
                   // get iframe for canvas
-                  e.innerHTML = '<div class="example u-cf"> <iframe src="/project/' + proj + '"></iframe><div class="sources">'+src+'</div></div>';
+                  e.innerHTML = '<div class="example u-cf"> <iframe src="/project/' + proj + '?small"></iframe><div class="sources">'+src+'</div></div>';
                 }, function(){});
             });
           })(sources, '');
@@ -228,16 +232,20 @@
 
     if (query('.project .left') != null) {
       var proj = document.body.dataset.project;
-
+      function active_source() {
+        return query('.tab-nav a.active').textContent;
+      }
       function add_source_tab(src) {
-        console.log('add src tab');
-        var tab = document.createElement('div');
-        tab.textContent = src;
-        tab.classList.add('tab');
-        query('.source-tabs').appendChild(tab);
+        //console.log('add src tab');
+        var tab = document.createElement('li');
+        var a = document.createElement('a');
+        a.textContent = src;
+        a.classList.add('button');
+        tab.appendChild(a);
+        query('.source-tabs').insertBefore(tab, query('.source-tabs li:nth-child(1)'));
       }
       function show_active_source() {
-        var js = query('.tab.active').textContent;
+        var js = active_source();
         get('/project/' + proj + '/'+js, function(req){
           var src = document.createElement('textarea');
           src.textContent = req.responseText;
@@ -249,25 +257,34 @@
         }, function(req){});
       }
       var source_changed = debounce(function(cm){
-        var js = query('.tab.active').textContent;
+        var js = active_source();
         var orig_src = cm.getValue(), src = orig_src.replace(/\+/g, "%2B");
-        console.log(src.replace(/\n/g, "LF").replace(/\r/g, "CR"), encodeURI(src)); 
         var fd = new FormData();
         fd.append('file', js);
         fd.append('data', encodeURI(src));
         post('/api/edit/' + proj, serialize_formdata(fd),
           function(req){
+            craft_console.clear();
+            query('iframe').src += '';
             try {
+              // While nice try we get better error reporting from iframe itself
               new Function(orig_src);
               // if ok, we can reload the iframe..
 
-              console.log("reload iframe");
-              query('iframe').src += '';
+              //console.log("reload iframe");
+              //query('iframe').src += '';
             } catch (e) {
-              console.log("there is some error: "+e);
+              //craft_console.error(e);
+              //console.log("there is some error: "+e);
             }
           }, function(req){});
       }, 1000);
+
+      function activate_assets() {
+        each(queryAll('.source-tabs li a'), function(a){ a.classList.remove('active'); });
+        query('#assets-tab').classList.add('active');
+        // render assets json...
+      }
       
       query('#fork').addEventListener('click', function(e){
         post('/api/fork/' + proj, "",
@@ -277,6 +294,14 @@
         );
       });
       
+      document.addEventListener('click', function(e){
+        var target = e.target || e.srcElement;
+        if (target.id == 'new-file-tab')
+          ;//new_file_
+        else if (target.id == 'assets-tab') 
+          activate_assets();
+      });
+      
       function resize() {
         var w = window,
             d = document,
@@ -284,24 +309,63 @@
             g = d.getElementsByTagName('body')[0],
             w = w.innerWidth || e.clientWidth || g.clientWidth,
             h = w.innerHeight|| e.clientHeight|| g.clientHeight;
+            ;
     
-        query('.right').style.height = (h - 50)+'px';
-        query('.source-file').style.height = (h - 50)+'px';
+        //query('.right').style.height = (h - 50)+'px';
+        query('.source-file').style.height = (h - query('.source-file').offsetTop)+'px';
+        query('iframe').style.height = ((h - query('iframe').offsetTop)*2/3) + 'px';
       }
 
       get('/project/' + proj + '/sources.json', function(req){
         each(JSON.parse(req.responseText), function(source){
           add_source_tab(source);
         })
-        query('.tab:first-child').classList.add('active');
+        query('.tab-nav li:first-child a').classList.add('active');
         
         show_active_source();
       }, function(){});
       
+      craft_console = {
+        clear: function() {
+          query('.console').innerHTML = '';
+        },
+        write: function(msg) {
+          var line = document.createElement('div');
+          line.textContent = msg;
+          query('.console').appendChild(line);
+        },
+        error: function(err) {
+          console.log(err.stack);         
+          var line = document.createElement('div');
+          line.classList.add('error');
+          var place = document.createElement('span');
+          place.textContent = '('+err.url.split(proj)[1] + ':' + err.line+')';
+          line.textContent = err.msg;
+          line.appendChild(place);
+          query('.console').appendChild(line);          
+        },
+        log: function() {
+          var args = Array.from(arguments );
+          console.log(args, arguments);
+          var line = document.createElement('div');
+          line.textContent = '';
+          for (var i=0; i<args.length; i++) {
+            if (i>0)
+              line.textContent += ', ';
+            line.textContent += JSON.stringify(args[i]);
+          }
+          query('.console').appendChild(line);
+        },
+      };
       window.addEventListener('message', function(msg){
-        var line = document.createElement('div');
-        line.textContent = msg.data;
-        query('.console').appendChild(line);
+        data = JSON.parse(msg.data);
+        console.log(msg, data);
+        if (data.type == 'error')
+          craft_console.error(data);
+        else if (data.type == 'log')
+          craft_console.log.apply(this, data.args);
+        else
+          craft_console.write(data);
       })
       window.addEventListener('resize', function(e){
         resize();

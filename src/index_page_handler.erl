@@ -7,10 +7,10 @@ init(Req0, Opts) ->
   
   Render = case Path of
     [_]                 -> index_view:render([{navbar, navbar()}]);
-    [_, "tutorials"]    -> tutorials_view:render([{navbar, navbar()}]);
+    [_, "tutorials"]    -> tutorials_view:render([{navbar, navbar("..")}]);
     [_, "tutorials", X] -> 
                            Module = list_to_atom(lists:append(["tut_", X, "_view"])),
-                           erlang:apply(Module, render, [[{navbar, navbar()}]]);
+                           erlang:apply(Module, render, [[{navbar, navbar("..")}]]);
     [_, User, Proj]     -> project_view:render([{navbar, navbar()}, {project, User ++ "/" ++ Proj }]);
                       _ -> index_view:render([{navbar, navbar()}])
   end, 
@@ -20,5 +20,5 @@ init(Req0, Opts) ->
 	}, Html, Req0),
 	{ok, Req, Opts}.
   
-navbar() -> element(2, a__navbar_view:render(#{})).
-  
+navbar() -> element(2, a__navbar_view:render([{root,"."}])).
+navbar(Root) -> element(2, a__navbar_view:render([{ root,Root}])).

@@ -54,11 +54,18 @@
       </div>
     
     <div class="left">
-      <iframe src="/project/{{ project }}"  ></iframe>
+      <iframe src="/project/{{ project }}" width="800" height="600"></iframe>
       <div class="console"></div>
     </div>
     <div class="right">
-      <div class="source-tabs"></div>
+      <ul class="tab-nav source-tabs">
+        <li>
+          <a id="new-file-tab" class="button">+</a>
+        </li>
+        <li>
+          <a id="assets-tab" class="button">ASSETS</a>
+        </li>
+      </ul>
       <div class="source-file"></div>
     </div>
     

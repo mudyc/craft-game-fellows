@@ -1,4 +1,4 @@
-
+/* navbar styling - blueish */
 .navbar {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1e5799+0,7db9e8+0,207cca+51,094ba0+100 */
   background: #1e5799; /* Old browsers */
@@ -22,10 +22,13 @@ nav .navbar-item {
   list-style: none;
   padding: 0.2em 2em;
 }
+nav .navbar-item:nth-child(1) {
+  padding-left: 0;
+}
 nav .navbar-item span, nav .navbar-item img {
   vertical-align: middle;
 }
-nav .navbar-item a {
+nav .navbar-item a:not(.no-button) {
   text-decoration: none;
   vertical-align: middle;
   color: white;
@@ -41,12 +44,14 @@ nav .navbar-item select {
   height: 3rem;
 }
 nav .navbar-item select,
-nav .navbar-item a {
+nav .navbar-item a:not(.no-button) {
   background: rgba(255,255,255,0.3);
    padding-top: 0.1rem;
    margin: 0;
 }
 
+
+/* modal styling */
 
 @import "https://fonts.googleapis.com/css?family=Raleway";
 .modal {
@@ -152,11 +157,67 @@ nav .navbar-item a {
   float: left;
   width: 48%;
   padding: 1%;
+  padding-bottom: 1px;
   margin:0;
 }
 .project iframe {
   border: none;
+  width: 100%;
+}
+.project .console {
+  word-wrap: break-word;
+}
+.project .console .error {
+  color: red;
 }
 .CodeMirror {
   height: 100%;
+}
+
+.project .source-file {
+  border: 1px solid #bbb;
+  border-top: none;
+  overflow-y: scroll;
+}
+
+
+
+/* skeleton-tabs https://github.com/nathancahill/skeleton-tabs/blob/master/skeleton-tabs.css */
+ul.tab-nav {
+    list-style: none;
+    border-bottom: 1px solid #bbb;
+    padding-left: 5px;
+    margin-bottom: 0;
+}
+
+ul.tab-nav li {
+    display: inline;
+}
+ul.tab-nav li a {
+    text-transform: none;
+}
+ul.tab-nav li a.button {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: -1px;
+    border-bottom: none;
+}
+
+ul.tab-nav li a.active.button {
+    border-bottom: 1px solid #fff;
+}
+
+.tab-content .tab-pane {
+    display: none;
+}
+
+.tab-content .tab-pane.active {
+    display: block;
+}
+
+
+/* index page */
+.size-64 {
+  width: 64px;
+  height: 64px;  
 }

@@ -3,8 +3,6 @@ TODO
 ====
 
 - project
-   - git editointi
-   - fork
    - delete
    - new
    - rename
@@ -37,6 +35,9 @@ TODO
 DONE
 ====
 
+- project
+   - git editointi
+   - fork
 - projektinäkymä
 - project embedding
 - tutorial
