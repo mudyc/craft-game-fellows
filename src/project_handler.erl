@@ -15,7 +15,7 @@ init(Req, Opts) ->
     
 canvas_html(User, Project, Req, Opts) ->    
     A = git:assets_list(User, Project),
-    io:fwrite("~p ~n", [A]),
+    %io:fwrite("assets ~p ~n", [A]),
     Assets = lists:map(fun(X) -> 
                {ok, Val} = maps:find(<<"name">>, X),
                {ok, Val2} = maps:find(<<"url">>, X),

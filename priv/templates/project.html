@@ -69,6 +69,41 @@
       <div class="source-file"></div>
     </div>
     
+    
+    <div class="modal" id="modal-img-assets">
+      <div class="modal-inner">
+          <div class="modal-content">
+            <div class="modal-close-icon">
+              <a href="javascript:void(0)" class="close-modal"><i class="fa fa-times" aria-hidden="true">&times;</i></a>
+            </div>
+            <div class="modal-content-inner">
+              <label>Category</label>
+              <select id="select-asset-category">
+                <option></option>
+                {{ asset_options }}
+              </select>
+              <label>Selection</label>
+              <button id="asset-prev" class="button">&lt;</button>
+              <span class="index"></span>/
+              <span class="count"></span>
+              <button id="asset-next" class="button">&gt;</button>
+              <input type="text">
+              <div>
+                <img>
+              </div>
+            </div>
+            <hr class="modal-buttons-seperator">
+            <div class="modal-buttons">
+              <button class="button close-modal">Cancel</button>
+              <button class="button button-primary">Login</button>
+            </div>
+          </div>
+      </div>
+    </div>
+    
+    
+    {{ templates }}
+    
     <script src="/js/codemirror.js"></script>    
     <script src="/js/web.js"></script>
   </body>

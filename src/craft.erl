@@ -22,7 +22,9 @@ start(_Type, _Args) ->
         % {"/api/:project/audio/list",   api_assets, {no_auth}},
         % {"/api/:project/audio/bind",   api_assets, []},
         % {"/api/:project/audio/unbind", api_assets, []},
-        {"/assets/img/[...]", api_assets, {no_auth}},
+        {"/assets/img/[...]",                  api_assets, {no_auth}},
+        {"/api/assets-list/:category",         api_assets, #{ method => assets_list, auth => not_needed }},
+        {"/api/asset/:category/:hash",         api_assets, #{ method => asset_data, auth => not_needed }},
         
         % Git service
         {"/api/edit/:user/:project",           api_sources, {edit}},

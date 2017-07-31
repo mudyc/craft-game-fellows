@@ -80,3 +80,41 @@ edit(User, Project, File, Data_) ->
   %rm -f lock
   
 
+
+asset_ls_tree(Repo, Path) ->
+  os:cmd("git -C " ++ Repo ++ " ls-tree --name-only master:"++Path).
+
+asset_ls_tree_all(Repo, Path) ->
+  os:cmd("git -C " ++ Repo ++ " ls-tree master:"++Path).
+  
+show(Repo, Hash) ->
+  {ExitCode, DataList} = my_exec("git -C " ++ Repo ++ " show " ++ Hash),
+  list_to_binary(DataList).
+  
+my_exec(Command) ->
+    Port = open_port({spawn, Command}, [stream, in, eof, hide, exit_status]),
+    get_data(Port, []).
+
+get_data(Port, Sofar) ->
+    receive
+    {Port, {data, Bytes}} ->
+        get_data(Port, [Sofar|Bytes]);
+    {Port, eof} ->
+        Port ! {self(), close},
+        receive
+        {Port, closed} ->
+            true
+        end,
+        receive
+        {'EXIT',  Port,  _} ->
+            ok
+        after 1 ->              % force context switch
+            ok
+        end,
+        ExitCode =
+            receive
+            {Port, {exit_status, Code}} ->
+                Code
+        end,
+        {ExitCode, lists:flatten(Sofar)}
+    end.

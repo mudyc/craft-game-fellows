@@ -2,6 +2,9 @@
 
 (function(){
   
+  var GALLERY_DATA;
+  
+  
   // utils
 
   function debounce(func, wait, immediate) {
@@ -84,6 +87,26 @@
     }
   }
 
+  var matches = function(el, selector) {
+    return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
+  };
+  function closest(el, selector) {
+    if (el == null) return null;
+    if (matches(el, selector)) return el;
+    return closest(el.parentNode, selector);
+  }
+
+
+  // API methods
+  
+  function api_fork(proj) {
+    post('/api/fork/' + proj, "",
+      function(req){
+          location.href = '/' + document.body.dataset.lang + req.responseText;
+      }, function(req){}
+    );
+  }
+
   (function(){
 
     // language
@@ -110,10 +133,10 @@
         while (len-- > 0) {
           tags[len].hidden = false;
         }
-        document.querySelector('#username').textContent = req.responseText;
+        query('#username').textContent = req.responseText;
       },
       function(req){ // failure
-        var tags = document.querySelectorAll('.logged-out'), len = tags.length;
+        var tags = queryAll('.logged-out'), len = tags.length;
         while (len-- > 0) {
           tags[len].hidden = false;
         }
@@ -149,7 +172,7 @@
     // set close modal behaviour
     for (i = 0; i < closeButtons.length; ++i) {
       closeButtons[i].addEventListener('click', function() {
-        modal.classList.toggle('modal-open');
+        closest(this, '.modal').classList.toggle('modal-open');
     	});
     }
     // close modal if clicked outside content area
@@ -213,17 +236,26 @@
           (function(sources, src){
             each(sources, function(source){
                 get('/project/' + proj + '/' + source, function(req){
-                  src += '<div class="header">' + source + '</div>';
-                  src += '<div class="source"><pre>' + req.responseText + '</pre></div>';
-              
-                  // get iframe for canvas
-                  e.innerHTML = '<div class="example u-cf"> <iframe src="/project/' + proj + '?small"></iframe><div class="sources">'+src+'</div></div>';
+                  var example = query('.templates .example').cloneNode(true);
+                  example.querySelector('li a.button').textContent = source;
+                  example.querySelector('.source pre').textContent = req.responseText;
+                  example.querySelector('iframe').setAttribute('src', '/project/' + proj + '?small');
+                  example.querySelector('.iframe-box .fork').dataset.project = proj;
+                  e.appendChild(example);
                 }, function(){});
             });
           })(sources, '');
         }, function(req){});
       })(e, proj);
     });
+    
+    document.addEventListener('click', function(e){
+      var target = e.target || e.srcElement;
+      if (target.classList.contains('fork')) {
+        api_fork(target.dataset.project);
+      }
+    });
+    
   })();
 
   (function(){
@@ -232,6 +264,7 @@
 
     if (query('.project .left') != null) {
       var proj = document.body.dataset.project;
+      
       function active_source() {
         return query('.tab-nav a.active').textContent;
       }
@@ -251,7 +284,7 @@
           src.textContent = req.responseText;
           query('.source-file').appendChild(src);
           resize();
-          var cm = CodeMirror.fromTextArea(src, { lineSeparator: "\n" });
+          var cm = CodeMirror.fromTextArea(src, { lineSeparator: "\n", lineNumbers: true, });
           cm.setOption("lineSeparator", "\n");
           cm.on('change', source_changed);
         }, function(req){});
@@ -283,25 +316,85 @@
       function activate_assets() {
         each(queryAll('.source-tabs li a'), function(a){ a.classList.remove('active'); });
         query('#assets-tab').classList.add('active');
+        query('.source-file').innerHTML = '';
+        
+        get('/project/' + proj + '/assets.json', function(req){
+          var data = JSON.parse(req.responseText);
+          each(data, function(a){
+            
+            var line = query('.templates .asset-line').cloneNode(true);
+            var del = line.querySelector('button');
+            var name = line.querySelector('span.name');
+            var img = line.querySelector('img');
+            del.dataset.name = a.name;
+            name.textContent = a.name;
+            img.setAttribute('src', a.url);
+            query('.source-file').appendChild(line);
+          });
+
+          query('.source-file').appendChild(query('.templates .asset-add').cloneNode(true));
+        }, function(req){});
         // render assets json...
       }
-      
-      query('#fork').addEventListener('click', function(e){
-        post('/api/fork/' + proj, "",
-          function(req){
-              location.href = '/' + document.body.dataset.lang + req.responseText;
-          }, function(req){}
-        );
+      function show_assets() {
+        query('#modal-img-assets').classList.toggle('modal-open');
+      }
+      function show_asset_gallery() {
+        var cat = query('#modal-img-assets select option:checked').value;
+        console.log(cat);
+        get('/api/assets-list/'+cat, function(req){
+          GALLERY_DATA = JSON.parse(req.responseText);
+          GALLERY_DATA.index = 0;
+          query('#modal-img-assets .count').textContent = GALLERY_DATA.length;
+          asset_gallery_change(0);
+        }, function(req){});
+      }
+      function asset_gallery_change(jmp) {
+        var d = GALLERY_DATA;
+        d.index = (d.index + jmp) % d.length;
+        query('#modal-img-assets .index').textContent = ""+(d.index + 1);
+        var category = query('#modal-img-assets select option:checked').value;
+        var i = 0;
+        for (var prop in d.data) {
+          if (!d.data.hasOwnProperty(prop)) continue;
+          if (d.index == i++) {
+            query('#modal-img-assets img').setAttribute('src', '/api/asset/'+ category +'/'+d.data[prop].url);
+            query('#modal-img-assets input').value = prop;
+            break;
+          }
+        }
+      }
+
+      query('#fork').addEventListener('click', function(e){ api_fork(proj); });
+      query('#delete').addEventListener('click', function(e){
+        api_delete(proj);
       });
-      
+
       document.addEventListener('click', function(e){
         var target = e.target || e.srcElement;
+        if (target.nodeName == 'SPAN')
+          target = target.parentNode;
+        
         if (target.id == 'new-file-tab')
           ;//new_file_
         else if (target.id == 'assets-tab') 
           activate_assets();
+        else if (target.id == 'asset-next') 
+          asset_gallery_change(1);
+        else if (target.id == 'asset-prev') 
+          asset_gallery_change(-1);
+        else if (target.id == 'add-img-asset')
+          show_assets();
       });
       
+      document.addEventListener('change', function(e){
+        var target = e.target || e.srcElement;
+        console.log(target.id);
+        if (target.id == 'select-asset-category')
+          show_asset_gallery();
+      });
+      
+
       function resize() {
         var w = window,
             d = document,
@@ -321,7 +414,6 @@
           add_source_tab(source);
         })
         query('.tab-nav li:first-child a').classList.add('active');
-        
         show_active_source();
       }, function(){});
       

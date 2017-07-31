@@ -2,6 +2,13 @@ CRAFT - game fellows
 
 Craft is a place / society / platform / environment for kids to learn some
 programming. It builds with pixijs, fast webgl accelerated rendering library,
-and adds a bunch of features to have smoothly working environment. It builds on
-top of other things too but I have not yet cherry picked those.
+and adds a bunch of features to have smooth working environment. 
+All projects are stored as git repositories and edits are done through 
+integrated web editor.
 
+There are three language options: finnish, spanish and english. 
+No preliminary javascript experience is expected since there are multiple 
+tutorials available which all help you to progress your skills.
+
+Assets are provided from picture bank and maybe in future we can integrate 
+paint app too. 
