@@ -1,3 +1,12 @@
+body {  
+  background-color: #ddd;
+  background: url("/img/metal3-bg.jpg") repeat;
+}
+body > .container {
+  background-color: white;
+  padding: 1.5rem;
+}
+
 /* navbar styling - blueish */
 .navbar {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1e5799+0,7db9e8+0,207cca+51,094ba0+100 */
@@ -7,6 +16,26 @@
   background: linear-gradient(to bottom, #1e5799 0%,#7db9e8 0%,#207cca 51%,#094ba0 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#094ba0',GradientType=0 ); /* IE6-9 */
 
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1270ea+0,e5f3fc+7,1747d6+49,1d3c91+97 */
+  background: #1270ea; /* Old browsers */
+  background: -moz-linear-gradient(top, #1270ea 0%, #e5f3fc 7%, #1747d6 49%, #1d3c91 97%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #1270ea 0%,#e5f3fc 7%,#1747d6 49%,#1d3c91 97%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #1270ea 0%,#e5f3fc 7%,#1747d6 49%,#1d3c91 97%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1270ea', endColorstr='#1d3c91',GradientType=0 ); /* IE6-9 */
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1270ea+0,e5f3fc+3,456bd3+26,3650e2+49,2b5ad1+52,11348e+99 */
+  background: #1270ea; /* Old browsers */
+  background: -moz-linear-gradient(top, #1270ea 0%, #e5f3fc 3%, #456bd3 26%, #3650e2 49%, #2b5ad1 52%, #11348e 99%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #1270ea 0%,#e5f3fc 3%,#456bd3 26%,#3650e2 49%,#2b5ad1 52%,#11348e 99%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #1270ea 0%,#e5f3fc 3%,#456bd3 26%,#3650e2 49%,#2b5ad1 52%,#11348e 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1270ea', endColorstr='#11348e',GradientType=0 ); /* IE6-9 */
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#45484d+0,ffffff+2,6e6c7c+17,000000+100 */
+  background: #45484d; /* Old browsers */
+  background: -moz-linear-gradient(top, #45484d 0%, #ffffff 2%, #6e6c7c 17%, #000000 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #45484d 0%,#ffffff 2%,#6e6c7c 17%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #45484d 0%,#ffffff 2%,#6e6c7c 17%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */  
   color: white;
 }
 nav .navbar-list {
@@ -126,7 +155,32 @@ nav .navbar-item a:not(.no-button) {
   text-align: center;
 }
 
+/* tutorials */
 
+.tutorials-list li {
+  list-style: none;
+  border: 2px solid #777;
+  border-radius: 1rem;
+  padding: 0;
+  width: 100%;
+}
+.tutorials-list li a {
+  padding: 2rem;
+  text-decoration: none;
+  color: black;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.tutorials-list li iframe {
+  float: left;
+  border: none;
+  width: 256px;
+  height: 256px;
+  margin-right: 2rem;
+}
+
+/* tutorial page */
 
 .abstract {
   font-size: 2.5rem;
@@ -140,8 +194,14 @@ nav .navbar-item a:not(.no-button) {
   border: none;
   margin-bottom: 10px;
 }
-.example .iframe-box, .example .sources {
-  width:46%;
+.example .iframe-box {
+  width:36%;
+  float: left;
+  border: none;
+  padding: 2%;
+}
+.example .sources {
+  width:56%;
   float: left;
   border: none;
   padding: 2%;
@@ -174,6 +234,7 @@ nav .navbar-item a:not(.no-button) {
 }
 .project .console {
   word-wrap: break-word;
+  background-color: white;
 }
 .project .console .error {
   color: red;
@@ -190,8 +251,8 @@ nav .navbar-item a:not(.no-button) {
 
 /* asset gallery */
 #modal-img-assets img {
-  max-width: 100vw;
-  max-height: 80vh;
+  max-width: 95vw;
+  max-height: 70vh;
 }
 
 
@@ -214,7 +275,8 @@ ul.tab-nav li a.button {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     margin-bottom: -1px;
-    border-bottom: none;
+    background-color: white;
+    border-bottom: 1px solid #bbb;
 }
 
 ul.tab-nav li a.active.button {

@@ -16,13 +16,8 @@ start(_Type, _Args) ->
   			{"/api/logout",           api_auth, []},
 
         % Assets service
-        % {"/api/:user/:project/img/list",     api_assets, {no_auth}},
-        % {"/api/:project/img/bind/:img", api_assets, []},
-        % {"/api/:project/img/unbind",   api_assets, []},
-        % {"/api/:project/audio/list",   api_assets, {no_auth}},
-        % {"/api/:project/audio/bind",   api_assets, []},
-        % {"/api/:project/audio/unbind", api_assets, []},
-        {"/assets/img/[...]",                  api_assets, {no_auth}},
+        {"/api/asset/add/:user/:project",      api_assets, #{ method => asset_add }},
+        {"/api/asset/del/:user/:project",      api_assets, #{ method => asset_del }},
         {"/api/assets-list/:category",         api_assets, #{ method => assets_list, auth => not_needed }},
         {"/api/asset/:category/:hash",         api_assets, #{ method => asset_data, auth => not_needed }},
         

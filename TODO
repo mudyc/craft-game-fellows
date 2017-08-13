@@ -6,7 +6,6 @@ TODO
    - delete
    - new
    - rename
-- kuvapankki
 - tutorial
     - logging
     - rotate
@@ -35,6 +34,11 @@ TODO
 DONE
 ====
 
+- tutorial
+    - rendering loop
+    - background
+    - scrolling background
+- kuvapankki
 - project
    - git editointi
    - fork

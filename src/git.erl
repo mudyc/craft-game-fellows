@@ -25,7 +25,10 @@ read_source(User, Project, Source) ->
   U = binary_to_list(User),
   P = binary_to_list(Project),
   S = binary_to_list(Source),
-  Assets = os:cmd("git -C repos/" ++ U ++ "/" ++ P ++ " show master:" ++ S),
+  % Assets = os:cmd("git -C repos/" ++ U ++ "/" ++ P ++ " show master:" ++ S),
+  {ExitCode, DataList} = my_exec("git -C repos/" ++ U ++ "/" ++ P ++ " show master:" ++ S),
+  Assets = list_to_binary(DataList),
+  
   io:fwrite("read: ~p",[Assets]),
   Assets.
 
@@ -41,8 +44,9 @@ edit(User, Project, File, Data_) ->
   Repo = "repos/" ++ U ++ "/" ++ P,
   F = binary_to_list(File),
   TMP = lib:nonl(os:cmd("mktemp")),
-  Data = unicode:characters_to_binary(http_uri:decode(binary_to_list(Data_))),
-  %io:fwrite("~p", [Data]),
+  io:fwrite("data: ~p", [binary_to_list(Data_)]),
+  Data = unicode:characters_to_binary(binary_to_list(Data_)),
+  io:fwrite("~p", [Data]),
   file:write_file(TMP, Data), %io_lib:fwrite("~p", [Data])),
   %io:fwrite("file: ~p~n",[TMP]),
 

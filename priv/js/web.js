@@ -2,6 +2,7 @@
 
 (function(){
   
+  
   var GALLERY_DATA;
   
   
@@ -225,7 +226,12 @@
   (function(){
 
     // tutorial examples
-  
+
+    each(queryAll('.embedded-preview'), function(e){
+      var proj = e.dataset.project;
+      e.innerHTML = '<iframe src="/project/' + proj + '?small"></iframe>';
+    });
+
     each(queryAll('.embedded-project'), function(e){
       var proj = e.dataset.project;
       
@@ -291,10 +297,10 @@
       }
       var source_changed = debounce(function(cm){
         var js = active_source();
-        var orig_src = cm.getValue(), src = orig_src.replace(/\+/g, "%2B");
+        var orig_src = cm.getValue(); //, src = orig_src.replace(/\%/g, "%25").replace(/\+/g, "%2B");
         var fd = new FormData();
         fd.append('file', js);
-        fd.append('data', encodeURI(src));
+        fd.append('data', encodeURIComponent(orig_src));
         post('/api/edit/' + proj, serialize_formdata(fd),
           function(req){
             craft_console.clear();
@@ -364,6 +370,34 @@
           }
         }
       }
+      query('[action="/api/asset/add"]').addEventListener("submit", function(e){
+        e.preventDefault();
+        var form = this;
+        var fd = new FormData();
+        var key = query('#modal-img-assets input').value;
+        var url = query('#modal-img-assets img').getAttribute('src');
+        fd.append('name', key);
+        fd.append('url', url);
+        post(form.getAttribute('action') + '/' + proj, serialize_formdata(fd),
+             function(req){ // success
+               closest(form, '.modal').classList.toggle('modal-open');
+               activate_assets();
+             }, function(req) {
+               
+             });
+      });
+      function del_asset(elm) {
+        var line = closest(elm, '.asset-line');
+        var name = line.querySelector('.name').textContent;
+        var fd = new FormData();
+        fd.append('name', name);
+        post('/api/asset/del/' + proj, serialize_formdata(fd),
+             function(req){ // success
+               line.parentNode.removeChild(line);
+              }, function(req) {
+          
+              });
+      }
 
       query('#fork').addEventListener('click', function(e){ api_fork(proj); });
       query('#delete').addEventListener('click', function(e){
@@ -385,6 +419,8 @@
           asset_gallery_change(-1);
         else if (target.id == 'add-img-asset')
           show_assets();
+        else if (target.id == 'del-img-asset')
+          del_asset(target);
       });
       
       document.addEventListener('change', function(e){

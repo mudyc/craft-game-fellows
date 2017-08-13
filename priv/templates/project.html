@@ -76,27 +76,41 @@
             <div class="modal-close-icon">
               <a href="javascript:void(0)" class="close-modal"><i class="fa fa-times" aria-hidden="true">&times;</i></a>
             </div>
-            <div class="modal-content-inner">
-              <label>Category</label>
-              <select id="select-asset-category">
-                <option></option>
-                {{ asset_options }}
-              </select>
-              <label>Selection</label>
-              <button id="asset-prev" class="button">&lt;</button>
-              <span class="index"></span>/
-              <span class="count"></span>
-              <button id="asset-next" class="button">&gt;</button>
-              <input type="text">
-              <div>
-                <img>
+            <form action="/api/asset/add" method="post">
+              <div class="modal-content-inner">
+                <label>Category</label>
+                <select id="select-asset-category">
+                  <option disabled selected>
+                    <span lang="fi">Valitse</span>
+                    <span lang="en">Choose</span>
+                    <span lang="es">Elegir</span>                  
+                  </option>
+                  {{ asset_options }}
+                </select>
+                <label>Selection</label>
+                <button type="button" id="asset-prev" class="button">&lt;</button>
+                <span class="index"></span>/
+                <span class="count"></span>
+                <button type="button" id="asset-next" class="button">&gt;</button>
+                <input type="text">
+                <div>
+                  <img>
+                </div>
               </div>
-            </div>
-            <hr class="modal-buttons-seperator">
-            <div class="modal-buttons">
-              <button class="button close-modal">Cancel</button>
-              <button class="button button-primary">Login</button>
-            </div>
+              <hr class="modal-buttons-seperator">
+              <div class="modal-buttons">
+                <button type="button" class="button close-modal">
+                  <span lang="fi">Peruuta</span>
+                  <span lang="en">Cancel</span>
+                  <span lang="es">Cancelar</span>
+                </button>
+                <button type="submit" class="button button-primary">
+                  <span lang="fi">Valitse</span>
+                  <span lang="en">Select</span>
+                  <span lang="es">Seleccionar</span>
+                </button>
+              </div>
+            </form>
           </div>
       </div>
     </div>
@@ -104,7 +118,7 @@
     
     {{ templates }}
     
-    <script src="/js/codemirror.js"></script>    
+    <script src="/js/codemirror.js"></script>
     <script src="/js/web.js"></script>
   </body>
 </html>

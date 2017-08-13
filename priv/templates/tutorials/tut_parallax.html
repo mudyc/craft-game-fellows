@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/img/craftman.png">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/skeleton.css">
+    <link rel="stylesheet" href="/css/web.css">
+  </head>
+  <body>
+    {{ templates }}
+    
+    {{ navbar }}
+    
+    <div class="container">
+      <h1>
+        <span lang="fi">Liikkuva tausta</span>
+        <span lang="en">Parallax background</span>
+        <span lang="es">Fondo de paralaje</span>
+      </h1>
+
+      <p class="abstract">
+        <img src="/img/craftman.png" alt="craftman">
+        Tässä opasteessa vieritetään taustaa eri nopeuksilla.
+      </p>
+      
+      <p lang="fi">
+        Ladataan ensin erilaisia taustoja. Tässä opasteessa käytämme yhtä isoa kuvaa, josta leikkaamme aiheeseen sopivia taustoja. Leikkauskohtien osoitus menee PIXI.Rectange:lle muodossa <b>x,y,leveys,korekeus</b>. Voit helpottaa arvailua katsomalla soveliaat koordinaatit piirto-ohjelmalla. Lisäksi kannattaa muistaa että origo on vasemmassa yläkulmassa, eikä alakulmassa.  
+      </p>
+      
+      <div class="embedded-project" data-project="tut/parallax-1"></div>
+      
+      <p lang="fi">
+        Kuvat pitää skaalata oikean kokoisiksi. <b>renderer</b> on meidän visuaalinen piirturi jolta saamme tietää piirto-alueen koon. Skaalataaan taustavärinä oleva väriliuku kokoruudun kokoiseksi ja kaupunki-silhuetit korkeudeltaan sopivan kokoisiksi.
+      </p>
+      
+      <div class="embedded-project" data-project="tut/parallax-2"></div>
+
+      <p lang="fi">
+        Laitetaan kuvat liikkeelle ohjaamalla x-positiota. Meillä on kuitenkin ongelma: kuvien loputtua tulee tyhjä kohta. Tämä voidaan välttää laittamalla kaksi kuvaa perätysten.
+      </p>
+      
+      <div class="embedded-project" data-project="tut/parallax-3"></div>
+
+      <p lang="fi">
+        Ratkaisu on laittaa kaksi kuvaa ja hyppäyttää vieritys takaisinpäin liitoskohtaan. Toteutetaan tämä niin että laitetaan kaksoiskuvat omaan <b>PIXI.Container</b> olioon.
+      </p>
+      
+      <div class="embedded-project" data-project="tut/parallax-4"></div>
+      
+      <p lang="fi">
+        Lopuksi viimeistellään vieritys laittamalla hiekkaa ja kaupunkia kuvaan.
+      </p>
+      
+      <div class="embedded-project" data-project="tut/parallax-5"></div>
+      
+    </div>
+    
+    <script src="/js/web.js"></script>
+  </body>
+</html>
