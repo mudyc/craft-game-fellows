@@ -50,7 +50,7 @@ start(_Type, _Args) ->
         
   		]}
   	]),
-  	{ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
+  	{ok, _} = cowboy:start_clear(http, [{port, 8009}], #{
   		env => #{dispatch => Dispatch}}
   	),
     craft_sup:start_link().
