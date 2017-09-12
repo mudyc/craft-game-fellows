@@ -492,6 +492,8 @@
           craft_console.error(data);
         else if (data.type == 'log')
           craft_console.log.apply(this, data.args);
+        else if (data.type == 'clear')
+          craft_console.clear.apply(this);
         else
           craft_console.write(data);
       })

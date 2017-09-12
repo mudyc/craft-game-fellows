@@ -47,6 +47,12 @@
           });
           parent.postMessage(data, '*');
         }
+        window.console.clear = function(){
+          data = JSON.stringify({
+            type: 'clear'
+          });
+          parent.postMessage(data, '*');
+        }
         window.addEventListener("unhandledrejection", function(event) { 
           console.log('some ding');
         });
