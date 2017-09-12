@@ -68,6 +68,9 @@ nav .navbar-item a:not(.no-button) {
   display: inline-block;
   height: 2.6rem;
 }
+nav .navbar-item a {
+  text-decoration: none;
+}
 nav .navbar-item select {
   background: rgba(255,255,255,0.3);
   height: 3rem;
