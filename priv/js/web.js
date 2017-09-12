@@ -114,7 +114,7 @@
 
     var lang = location.pathname.split('/')[1];
     document.body.dataset.lang = lang;
-    each(queryAll('[lang]:not([lang="'+lang+'"]'), function(lang_tag){
+    each(queryAll('[lang]:not([lang="'+lang+'"])'), function(lang_tag){
       lang_tag.hidden = true;
     });
     query('#lang-selector option[value="'+lang+'"]').selected = true;
